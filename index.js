@@ -9,7 +9,13 @@ var jwt = require('jsonwebtoken');
 // be sure to add the .env file for this
 var secret = process.env.JWT_SECRET;
 
+// use rowdy-logger to show express routes
+var rowdy = require('rowdy-logger');
+
 var app = express();
+
+// start using rowdy-logger on the express app
+rowdy.begin(app);
 
 // mongoose models and connection
 var mongoose = require('mongoose');
@@ -51,16 +57,21 @@ app.post('/api/auth', function(req, res) {
         if (err || !isAuthenticated) return res.status(401).send({ message: 'User not authenticated' });
 
         // sign the JWT with the user payload and secret, then return
+        // the .toJSON() method might not be needed here, from code comparison
         var token = jwt.sign(user.toJSON(), secret);
 
+        // the return clause might not be needed here, from code comparison
         return res.send({ user: user, token: token });
     });
 });
 
+// all GETs that are not handled by the above controllers and routes are sent the public/index.html file (uses AngularJS)
 app.get('/*', function(req, res) {
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
-var server = app.listen(process.env.PORT || 3000);
+var server = app.listen(process.env.PORT || 3000, function() {
+    rowdy.print();
+});
 
 module.exports = server;
