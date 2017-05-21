@@ -81,21 +81,21 @@ angular.module('RecipeCtrls', ['RecipeServices'])
                 console.log('response from server when logging in:', res);
                 Auth.saveToken(res.data.token);
                 Alerts.add('success', 'You are now logged in successfully.');
-                $timeout(clearAlerts, 1500);
+                $timeout(clearAlerts, 5500);
                 // $scope.isLoggedIn = Auth.isLoggedIn();
                 $location.path('/'); // redirect to home page
             }, function error(res) {
                 console.log('Something went wrong', res);
                 Alerts.add('error', 'Bad Login Info, Please Try Again.');
-                $timeout(clearAlerts, 1500);
+                $timeout(clearAlerts, 5500);
             });
         };
     }])
-    // .controller('AlertsController', ['$scope', 'Alerts', function($scope, Alerts) {
-    //     $scope.alerts = function() {
-    //         return Alerts.get();
-    //     };
-    // }])
-    .controller('AlertCtrl', ['$scope', 'Alerts', function($scope, Alerts) {
-        $scope.Alerts = Alerts;
+    .controller('AlertsController', ['$scope', 'Alerts', function($scope, Alerts) {
+        $scope.alerts = function() {
+            return Alerts.get();
+        };
     }]);
+// .controller('AlertCtrl', ['$scope', 'Alerts', function($scope, Alerts) {
+//     $scope.Alerts = Alerts;
+// }]);
